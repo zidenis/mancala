@@ -1,0 +1,180 @@
+//@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Montserrat-Regular.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/Montserrat-Bold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+p {
+    font-size: 1.5em;
+}
+
+#mancala-logo {
+    max-height: 64px;
+    min-height: 64px;
+    background: rgb(238, 238, 238);
+    border-radius: 10px;
+    border-color: lightgray;
+    border-width: 1px;
+    border-style: solid;
+    margin-top: 15px;
+    position: relative;
+}
+
+.logo-text {
+    font-size: 2em;
+    font-weight: bolder;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#rules {
+    position: absolute;
+    z-index: 1;
+    left: 15%;
+    right: 15%;
+    top: 72px;
+    display: none;
+}
+
+#rules:target {
+    display: block;
+    box-shadow: 5px 8px 15px grey;
+}
+
+#message {
+    color: orange;
+    font-size: 1.5em;
+    margin-top: 15px;
+}
+
+#mancala {
+    margin-bottom: 15px;
+}
+
+#setup {
+    min-height:214px;
+}
+
+#board {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    min-width: 500px;
+}
+
+footer {
+    margin-bottom: 15px;
+}
+
+#logwindow {
+    max-height: 64px;
+    min-height: 64px;
+    overflow-y: scroll;
+    background: rgb(238, 238, 238);
+    border-radius: 10px;
+    border-color: lightgray;
+    border-width: 1px;
+    border-style: solid;
+    position: relative;
+    padding-bottom: 1px;
+}
+
+.radio {
+    margin: 20px;
+}
+
+.kahala {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bolder;
+    color: #8A7254;
+    min-height: 214px;
+    background-color: antiquewhite;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: burlywood 5px outset;
+    border-bottom: burlywood 5px outset;
+}
+
+#kahala1 {
+    border-right: burlywood 5px outset;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#kahala2 {
+    border-left: burlywood 5px outset;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.kahalapit {
+    text-align: center;
+    padding-top: 20px;
+    background-color: bisque;
+    border: burlywood 3px inset;
+    min-height: 130px;
+    border-radius: 15px;
+}
+
+#seedzone {
+    background-color: antiquewhite;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: burlywood 5px outset;
+    border-bottom: burlywood 5px outset;
+    min-height:214px;
+}
+
+.pit {
+    text-align: center;
+    background-color: bisque;
+    border: burlywood 3px inset;
+    min-height: 60px;
+    border-radius: 25px;
+    margin-top:3px;
+    margin-bottom:3px;
+    padding-top:3px;
+}
+
+.pitnum {
+    color: #8A7254;
+    font-size: 10px;
+    vertical-align: top;
+}
+
+.seedsnum {
+    color: #8A7254;
+    vertical-align: bottom;
+    font-size: 11px;
+}
+
+.activepit {
+    cursor: pointer;
+}
+
+div.activepit:hover {
+    background: rgb(216, 158, 117);
+}
+
+
+

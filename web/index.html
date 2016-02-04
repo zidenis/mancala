@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<!--
+// Copyright (c) 2016, zidenis (http://dart.blog.br)
+// All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be found in the LICENSE file.
+-->
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mancala</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script async src="main.dart" type="application/dart"></script>
+    <script async src="packages/browser/dart.js"></script>
+</head>
+<body>
+<audio id="drops" src="./audio/drops.mp3"></audio>
+<header>
+    <div class="container">
+        <div id="mancala-logo" class="text-center alert alert-dismissible" role="alert">
+            <div class="col-xs-3"></div>
+            <div class="col-xs-6">
+            <a href="#rules"><span class="logo-text">Mancala</span><span class="logo-text glyphicon glyphicon-question-sign"></span></a>
+            </div>
+            <div class="col-xs-3">
+            <span id="volume" class="logo-text glyphicon glyphicon-volume-up"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria="hiden-true" class="glyphicon glyphicon-remove"></span></button>
+            </div>
+        </div>
+        <div id="rules" class="alert alert-info text-left alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria="hiden-true" class="glyphicon glyphicon-remove"></span></button>
+            <p class="text-center">
+                The goal is to collect more seeds than your opponent does.
+            </p>
+            <ol>
+                <li>The Mancala board is made up of 2 rows of 6 holes each and 2 special-holes called Kahalas. Each player has one Kahala to the your right side of the mancala board.</li>
+                <li>6 seeds are placed in each of the 12 roles.</li>
+                <li>The Kahalas are initially empty.</li>
+                <li>The game begins with one player picking up all of the seeds in one of the non-empty holes on his side.</li>
+                <li>Moving counter-clockwise, the player deposits one of the seeds in each hole (including kahalas) he runs until the seeds run out.</li>
+                <li>If the last seed you drop is in your own Kahala, you get a free turn.</li>
+                <li>If the last seed you drop is in an empty hole, you collect all the seeds on the hole directly opposite.</li>
+                <li>The game ends when all the 6 holes on one side of the mancala board are empty.</li>
+                <li>The player who still has seeds on his side of the board when the game ends captures all of those seeds to his kahala</li>
+                <li>The winner is the player with the most seeds.</li>
+            </ol>
+        </div>
+    </div>
+</header>
+<div id="mancala">
+    <div id="message" class="text-center"></div>
+    <div id="setup" class="container text-center">
+        <div>
+            <p><a href="http://en.wikipedia.org/wiki/Mancala" target="_blank">Mancala</a> is a family of board games played around the world, also know as "count-and-capture" games. Click on the question-sign above to see the rules.</p>
+            <p>This game is an <a href="http://www.github.com/zidenis/mancala" target="_blank">open-source</a> software made with <a href="http://dartlang.org" target="_blank">Dart Language</a>. Contributions are welcomed.</p>
+        </div>
+        <div class="row radio">
+            <label class="btn-lg">
+                <input type="radio" name="difficult" id="radio1" value="easy">
+                Easy
+            </label>
+            <label class="btn-lg">
+                <input type="radio" name="difficult" id="radio2" value="normal" checked>
+                Normal
+            </label>
+            <label class="btn-lg">
+                <input type="radio" name="difficult" id="radio3" value="hard">
+                Hard
+            </label>
+        </div>
+        <div class="row">
+            <button class="btn btn-success btn-lg">1 player</button>
+            <button class="btn btn-success btn-lg" data-two-players>2 players</button>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <div class="text-center alert alert-dismissible" id="logwindow" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria="hiden-true" class="glyphicon glyphicon-remove"></span></button>
+            <ul id="log" class="text-left">
+                <li> Loaging ...</li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
