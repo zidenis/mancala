@@ -7,20 +7,23 @@ import 'dart:math';
 import 'dart:async';
 
 import 'mancala.dart';
+import 'tree-node.dart';
 
 bool twoPlayers;
-bool soundEnabled;
 String difficult;
+Board board;
+
+bool soundEnabled;
 AudioElement clickSound;
+DivElement msgElement;
 DivElement mancalaElement;
 DivElement kahala1Element;
 DivElement kahala2Element;
-Map<int, DivElement> pitElements;
-DivElement msgElement;
 DivElement logWindow;
 OListElement logElement;
-Board board;
+Map<int, DivElement> pitElements;
 
+// Initializes the app
 void main() {
   soundEnabled = true;
   logWindow = querySelector('#logwindow');
@@ -36,7 +39,7 @@ void main() {
 /// Starts a new game when the player press "1 player" or "2 players" button
 startGame(MouseEvent event) {
   // Creates a new board game registering callback functions that will be called when game state changes
-  board = new Board(add2log, nextTurn);
+  board = new Board(add2log, nextTurn, true);
   twoPlayers = (event.target as Element).dataset.containsKey('twoPlayers');
   // getting difficult value from radio buttons
   RadioButtonInputElement difficultRadio =
@@ -132,6 +135,16 @@ bool shouldActivatePit(Pit pit) {
   }
 }
 
+/// Adds messages to UI
+add2log(String message) {
+  DateTime dt = new DateTime.now();
+  String hour = dt.hour.toString().padLeft(2, '0');
+  String minute = dt.minute.toString().padLeft(2, '0');
+  String second = dt.second.toString().padLeft(2, '0');
+  logElement.append(new LIElement()..text = '$hour:$minute:$second - $message');
+  logWindow.scrollTop = logWindow.scrollHeight;
+}
+
 /// Execute the move of the player when he clicks on one of his pits
 ///
 /// The move is performed when the player clicks on a pit that is located
@@ -158,13 +171,13 @@ executePlayersMove(MouseEvent event) {
   board.startSeeding(pitNumber);
 }
 
-
 // Sets up the next turn, calling the computer move if it is the Computer's turn
 void nextTurn() {
   updateBoardUI();
   if (board.gameOver) {
     if (board.kahala1 > board.kahala2)
-      msgElement.text = "Finished. ${twoPlayers ? "1st Player" : "YOU"}  Won!!!";
+      msgElement.text =
+          "Finished. ${twoPlayers ? "1st Player" : "YOU"}  Won!!!";
     else if (board.kahala1 < board.kahala2)
       msgElement.text =
           "Finished. ${twoPlayers ? "2nd Player" : "Computer"} Won!!!";
@@ -173,23 +186,27 @@ void nextTurn() {
   }
   //calls computer move if the type of game is Player vs Computer
   //and it is the computer time to play
-  if (!twoPlayers && !board.isPlayerOne) chooseComputerMove();
+  else if (!twoPlayers && !board.isPlayerOne) chooseComputerMove();
 }
 
+/// Chooses the computer move according to selected game difficult
 chooseComputerMove() async {
   switch (difficult) {
     case "easy":
       new Future.delayed(new Duration(seconds: 1), computerRandomMove);
       break;
     case "normal":
-      computerRandomMove();
+      new Future.delayed(new Duration(seconds: 1), () {
+        board.startSeeding(chooseBestMove(buildDecisionTree(4, [new TreeNode.root(new Board.clone(board))])));});
       break;
     case "hard":
-      computerRandomMove();
+      new Future.delayed(new Duration(seconds: 1), () {
+        board.startSeeding(chooseBestMove(buildDecisionTree(6, [new TreeNode.root(new Board.clone(board))])));});
       break;
   }
 }
 
+/// Random move for computer in easy games
 computerRandomMove() {
   Random rndGen = new Random();
   int pitNumber = rndGen.nextInt(6) + 7;
@@ -200,25 +217,60 @@ computerRandomMove() {
   }
 }
 
-/// Adds messages to UI
-add2log(String message) {
-  DateTime dt = new DateTime.now();
-  String hour = dt.hour.toString().padLeft(2, '0');
-  String minute = dt.minute.toString().padLeft(2, '0');
-  String second = dt.second.toString().padLeft(2, '0');
-  logElement.append(new LIElement()..text = '$hour:$minute:$second - $message');
-  logWindow.scrollTop = logWindow.scrollHeight;
+/// Builds a decision tree with nodes, returning the leaf nodes in a List.
+///
+/// Each Node will have a game board representing the game state in the future.
+///
+List<TreeNode> buildDecisionTree(int decisionTreeHeight, List<TreeNode> decisionTree) {
+  if (decisionTreeHeight == 0)
+    return decisionTree;
+  else {
+    for (TreeNode node in new List.from(decisionTree)) {
+      if (node.board.isPlayerOne) {
+        for (int pitNumber = 1; pitNumber < 7; pitNumber++) {
+          if (node.board.getPit(pitNumber).numOfSeeds > 0) {
+            decisionTree.add(new TreeNode(node, pitNumber, true));
+          }
+        }
+      } else {
+        for (int pitNumber = 7; pitNumber < 13; pitNumber++) {
+          if (node.board.getPit(pitNumber).numOfSeeds > 0) {
+            TreeNode tmpNode = new TreeNode(node, pitNumber, false);
+            decisionTree.add(tmpNode);
+          }
+        }
+      }
+      if (decisionTree.length == 1)
+        decisionTreeHeight = 1;
+      else {
+        decisionTree.remove(node);
+      }
+    }
+    return buildDecisionTree(decisionTreeHeight - 1, decisionTree);
+  }
 }
 
+/// Evaluates the leaf nodes of the decision tree to determine the best move for computer
+int chooseBestMove(List<TreeNode> boardList) {
+  return boardList
+      .reduce((nodeA, nodeB) =>
+          (nodeA.boardScore >= nodeB.boardScore) ? nodeA : nodeB)
+      .originalPitNumber;
+}
+
+/// Plays a sound on user click
 playClickSound() {
   if (soundEnabled) clickSound.play();
 }
 
+/// Toggles the volume between on and off
 volumeButton(MouseEvent event) {
   if (soundEnabled) {
-    (event.target as SpanElement).setAttribute('class','logo-text glyphicon glyphicon-volume-off');
+    (event.target as SpanElement)
+        .setAttribute('class', 'logo-text glyphicon glyphicon-volume-off');
   } else {
-    (event.target as SpanElement).setAttribute('class','logo-text glyphicon glyphicon-volume-up');
+    (event.target as SpanElement)
+        .setAttribute('class', 'logo-text glyphicon glyphicon-volume-up');
   }
   soundEnabled = !soundEnabled;
 }
