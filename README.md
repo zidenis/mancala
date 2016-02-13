@@ -1,3 +1,5 @@
+# try it: http://mancala-dart.appspot.com
+
 # Mancala
 
 Mancala is a family of board games played around the world, also know as "count-and-capture" games.
